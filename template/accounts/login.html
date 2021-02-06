@@ -1,0 +1,49 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Sign In
+{% endblock title %}
+    
+
+{% block content %}
+    
+<div class="w-300 w-sm-350 bg-white p-30 pb-20 border border-1 border-secondary text-center">
+    
+    <!-- logo -->
+    <img class="w-200 mb-20" src="{% static 'accounts/logo-text.png' %}" alt="">
+    
+    <!-- form -->
+    <form method="POST" class="w-300 mw-full"> <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+        {% csrf_token %}
+        <div class="mb-10">
+        <input type="email" class="form-control" name='email' id="username" placeholder="email" required="required">
+        </div>
+        <div class="mb-20">
+        <input type="password" class="form-control" name='password' id="password" placeholder="password" required="required">
+        {% if error %}
+        <p class="text-danger"> {{ error_msg }} </p>
+        {% endif %}
+        </div>
+        <input class="btn btn-primary btn-block font-weight-medium" type="submit" value="Log In">
+    </form>
+    
+    <!-- or -->
+    <div class="d-flex align-items-center">
+        <div class="border-top border-1 border-secondary w-full"></div>
+        <div class="insta-fg-secondary p-20 font-size-12 font-weight-medium">OR</div>
+        <div class="border-top border-1 border-secondary w-full"></div>
+    </div>
+
+    <a href="" class="font-size-12 insta-fg">Forgot password?</a>
+
+</div>
+
+<!-- sign up -->
+<div class="w-300 w-sm-350 bg-white mt-10 p-20 border border-1 border-secondary text-center">
+    Don't have an account?
+    <a href="{% url 'accounts:register' %}" class="font-weight-semi-bold">Sign up</a>
+</div>
+
+{% endblock content %}

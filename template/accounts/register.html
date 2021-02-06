@@ -1,0 +1,51 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Sign In
+{% endblock title %}
+    
+
+{% block content %}
+    
+<div class="w-300 w-sm-350 bg-white p-30 pb-20 border border-1 border-secondary text-center">
+    
+    <!-- logo -->
+    <img class="w-200 mb-20" src="{% static 'accounts/logo-text.png' %}" alt="">
+    
+    <!-- form -->
+    <form method="POST" class="w-300 mw-full"> <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+        {% csrf_token %}
+        
+        {% with WIDGET_ERROR_CLASS='error-field' WIDGET_REQUIRED_CLASS='required-field' %}
+        {% for fields in form.visible_fields %}
+            <div class="mb-10">
+                {% render_field fields class="form-control" placeholder=fields.label %}
+                <ul class="errorlist">
+                    {% for err in fields.errors %}
+                    <li>{{ err }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        {% endwith %}
+
+        <input class="btn btn-primary btn-block font-weight-medium mt-20" type="submit" value="Sign up">
+    </form>
+    
+    <!-- policy -->
+    <p class="font-size-12 text-muted">
+        By signing up, you agree to our Terms , Data Policy and Cookies Policy .
+    </p>
+
+
+</div>
+
+<!-- sign in -->
+<div class="w-300 w-sm-350 bg-white mt-10 p-20 border border-1 border-secondary text-center">
+    Have an account?
+    <a href="{% url 'accounts:login' %}" class="">Log in</a>
+</div>
+
+{% endblock content %}

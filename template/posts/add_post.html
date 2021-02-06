@@ -1,0 +1,282 @@
+{% extends 'posts/base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block scripts_extra %}
+    <script src="{% static 'posts/compressor.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.9/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.9/cropper.min.css">
+{% endblock scripts_extra %}
+
+
+{% block content %}
+<div class="d-flex justify-content-center mt-0 mt-sm-20">
+    <div class="w-full"
+        style="max-width: 610px;">
+
+        <!-- card -->
+        <div class="bg-white border border-1 rounded mb-sm-20 p-10 p-sm-15">
+            
+            <h6 class="font-weight-semi-bold">New Post</i></h6>
+
+            <form id="id_form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- preview target element -->
+                <img id="target" class="w-full border rounded" src="" alt="">
+
+                <div class="mb-10 d-flex justify-content-between">
+                    <label class="btn text-muted font-weight-medium" for="id_image">Choose Image</label>
+                    {% render_field form.image class="form-control d-none" placeholder=form.image.label %}
+                    
+
+                    <div style="display: none;" id="edit_menu">
+                        <button id="free_crop" type="button" class="ico text-dark pl-0 border-0 bg-transparent font-size-16 font-weight-medium">FREE</button>
+                        <button id="one_one_crop" type="button" class="ico text-dark border-0 bg-transparent font-size-16 font-weight-medium">1:1</i></button>
+                        <button id="four_three_crop" type="button" class="ico text-dark border-0 bg-transparent font-size-16 font-weight-medium">4:3</i></button>
+                        <button id="save_crop" type="button" class="btn btn-sm btn-square btn-primary rounded-circle"><i class="fas fa-check"></i></button>
+                    </div>
+
+                </div>
+
+                <div id="caption_con">
+                    <div class="mb-10">
+                        {% render_field form.caption class="form-control" placeholder='Write a caption...' %}
+                        <ul class="errorlist">
+                            {% for err in form.caption.errors %}
+                            <li>{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Post">
+                </div>
+
+            </form>
+
+        </div>
+        
+    </div>
+
+    <!-- right-side-bar -->
+    <div class="d-none d-lg-block position-relative" style="max-width: 290px;width: 290px; margin-left: 40px;z-index: 1;">
+        <div class="position-fixed" style="width: inherit;margin-top: 2em;">
+            <!-- userpic & name -->
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img class="border rounded-circle w-50 mr-10" src="{% static 'accounts/avatar.png' %}" alt="">
+                    <div>
+                        <div class="text-black font-weight-medium">designs.ui</div>
+                        <div class="text-gray">ui/ux designs</div>
+                    </div>
+                </div>
+                <button class="ico text-primary border-0 bg-transparent font-size-12 font-weight-medium">More</button>
+            </div>
+
+            <!-- suggestion -->
+            <div class="d-flex justify-content-between align-items-center  mt-20 mb-15">
+                <div class="text-muted font-size-14 font-weight-medium">
+                    Suggestions For You
+                </div>
+                <button class="ico text-dark border-0 bg-transparent font-size-12 font-weight-medium">See All</button>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-10">
+                <div class="d-flex align-items-center">
+                    <img style="width: 35px; height: 35px; object-fit: cover;" class="border rounded-circle mr-10" src="https://images.unsplash.com/photo-1564048843342-6588968397ce?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=40&q=80" alt="">
+                    <div>
+                        <div class="text-black font-weight-medium">Jishad_kp_</div>
+                        <div class="text-gray font-size-12">Suggested for you</div>
+                    </div>
+                </div>
+                <button class="ico text-primary border-0 bg-transparent font-size-12 font-weight-medium">Follow</button>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-10">
+                <div class="d-flex align-items-center">
+                    <img style="width: 35px; height: 35px; object-fit: cover;" class="border rounded-circle mr-10" src="https://images.unsplash.com/photo-1574579991264-a87099cc17b1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=40&q=80" alt="">
+                    <div>
+                        <div class="text-black font-weight-medium">jamsheer_koniyath</div>
+                        <div class="text-gray font-size-12">Popular</div>
+                    </div>
+                </div>
+                <button class="ico text-primary border-0 bg-transparent font-size-12 font-weight-medium">Follow</button>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-10">
+                <div class="d-flex align-items-center">
+                    <img style="width: 35px; height: 35px; object-fit: cover;" class="border rounded-circle mr-10" src="https://images.unsplash.com/photo-1485206412256-701ccc5b93ca?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=42&q=80" alt="">
+                    <div>
+                        <div class="text-black font-weight-medium">sahad_mukkam</div>
+                        <div class="text-gray font-size-12">Popular</div>
+                    </div>
+                </div>
+                <button class="ico text-primary border-0 bg-transparent font-size-12 font-weight-medium">Follow</button>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        .cropper-view-box {
+            outline: 1px solid #fff;
+            outline-color: rgb(255 255 255 / 75%);
+        }
+
+        .cropper-face {
+            background-color: transparent;
+        }
+
+        .cropper-line {
+            background-color: #f3f5f7;
+        }
+
+        .cropper-point {
+            background-color: #fff;
+        }
+
+        .cropper-modal {
+            background-color: #fff;
+        }
+    </style>
+
+    <script>
+        var form = document.getElementById('id_form')
+        var imgSelector = document.getElementById('id_image')
+        var imgTarget = document.querySelector('#target')
+        var editMenu = document.querySelector('#edit_menu')
+        var freeCrop = document.querySelector('#free_crop')
+        var oneOneCrop = document.querySelector('#one_one_crop')
+        var fourThreeCrop = document.querySelector('#four_three_crop')
+        var saveCrop = document.querySelector('#save_crop')
+        var captionCon = document.querySelector('#caption_con')
+        
+        
+
+        var cropper;
+        var blob;
+
+        // previews image when selected from storage
+        function readURL(event) {
+            
+            let input = event.target
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+
+                    // setting input file to img source
+                    imgTarget.setAttribute('src', e.target.result);
+                    document.querySelector('label[for="id_image"]').innerHTML = 'Change Image'
+                    
+
+                    // destroying cropper if already created
+                    // to prevent problems when changing image 
+                    if(cropper != undefined){
+                        cropper.destroy()
+                        cropper = undefined;
+                    }
+
+                    // initializer cropping instance
+                    cropper =  new Cropper(imgTarget, {
+                        aspectRatio: NaN,
+                        viewMode: 1,
+                        background: false,
+                        zoomable: false,
+                        zoomOnTouch: false,
+                        zoomOnWheel: true,
+                        ready: function(){
+                            editMenu.style.display = "block";
+                            captionCon.style.display = "none"
+                            cropper.setCropBoxData(cropper.getCanvasData())
+                        }
+                    })
+                }
+
+                // reading image from file input and setting to file reader
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        imgSelector.addEventListener('change', readURL)
+
+        // applying crop and previews new image
+        saveCrop.addEventListener('click', function(){
+
+            // return cropped image as blob
+            cropper.getCroppedCanvas().toBlob((blb) => {
+                blob = blb
+                cropper.destroy()
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imgTarget.setAttribute('src', e.target.result);
+                }
+
+                // setting cropped result as new preview
+                reader.readAsDataURL(blob);
+
+
+                editMenu.style.display = "none";
+                captionCon.style.display = "block"
+
+
+            })
+        })
+
+        // compressing image on form submission
+        form.addEventListener('submit', function(event){
+            event.preventDefault();
+
+            if(blob != undefined){
+
+                var file = new File([blob], imgSelector.files[0].name, {type: blob.type, lastModified: new Date().getTime()})
+                console.log(file.size)
+
+                // compression start here
+                new Compressor(file, {
+                quality: 0.4,
+                width: 780,
+                maxWidth: 780,
+                success(result) {
+                    console.log(result.size)
+                    var formData = new FormData()
+                    formData.append('csrfmiddlewaretoken', form.csrfmiddlewaretoken.value)
+                    formData.append('caption', form.caption.value)
+
+                    // The third parameter is required for server
+                    formData.append('image', result, result.name);
+
+                    // submititing form as ajax post
+                    $.ajax("{% url 'posts:add_post' %}", {
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success() {
+                            console.log('Upload success');
+                            location.replace('{% url "posts:home" %}')
+                        },
+                        error() {
+                            console.log('Upload error');
+                        },
+                    });
+
+                    }
+                })
+            }
+
+
+        })
+
+        // crop tools methods
+        freeCrop.addEventListener('click', () => cropper.setAspectRatio(NaN) )
+        oneOneCrop.addEventListener('click', () => cropper.setAspectRatio(1/1) )
+        fourThreeCrop.addEventListener('click', () => cropper.setAspectRatio(4/3) )
+        
+
+    </script>
+
+</div>
+{% endblock content %}
