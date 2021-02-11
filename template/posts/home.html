@@ -35,7 +35,10 @@
                     <!-- post button -->
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button class="ico text-dark pl-0 border-0 bg-transparent font-size-22"><i class="far fa-heart"></i></button>
+                        
+                            <button data-id='{{ post.id }}' class="like-btn ico {% if post.is_liked %} text-danger {% endif %} pl-0 border-0 bg-transparent font-size-22">
+                                <i class="{% if post.is_liked %} fas {% else %} far {% endif %}fa-heart"></i>
+                        </button>
                             <button class="ico text-dark border-0 bg-transparent font-size-22"><i class="far fa-comment"></i></button>
                             <button class="ico text-dark border-0 bg-transparent font-size-22"><i class="far fa-paper-plane"></i></button> 
                         </div>
@@ -45,7 +48,7 @@
                     </div>
 
                     <!-- post likes -->
-                    <p class="my-5 font-weight-semi-bold text-dark">5,019 likes</p>
+                    <p class="my-5 font-weight-semi-bold text-dark">{{ post.post_likes.count }} likes</p>
 
                     <!-- post user and description -->
                     <div>
@@ -58,26 +61,21 @@
                     </div>
 
                     <!-- comments -->
-                    <span class="text-gray font-size-14">View all 17 comments</span>
+                    {% if post.post_comments.count > 3 %}
+                    <span class="text-gray font-size-14">View all {{ post.post_comments.count }} comments</span>
+                    {% endif %}
 
-                    <div>
+                    <div class="comments">
+                        {% for comment in post.post_comments.all|slice:":3" %}
                         <div class="mt-5">
                             <p class="my-0 text-dark d-inline-block">
-                                <span class="font-weight-semi-bold ">photograpvintage</span>
+                                <span class="font-weight-semi-bold ">{{ comment.user.first_name }}</span>
                                 <span class="">
-                                    😂😂😂#memes follow @norulesmake.up
-                                    Follow @norulesmake.up tag @norulesmake.up to get featured
+                                    {{ comment.comment }}
                                 </span>
                             </p>
                         </div>
-                        <div class="mt-5">
-                            <p class="my-0 text-dark d-inline-block">
-                                <span class="font-weight-semi-bold ">sara_begou</span>
-                                <span class="">
-                                    @juju_brds ptdr moi la dernière fois à Pau
-                                </span>
-                            </p>
-                        </div>
+                        {% endfor %}
                     </div>
                     <!-- end comments -->
 
@@ -166,4 +164,80 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function(){
+            $('.post-comment').click(function(){
+                var id =  $(this).data('id')
+                var comment_box = $(this).prev()
+                var post_btn = $(this)
+
+                function createComment(user, comment){
+                    return `<div class="mt-5">
+                            <p class="my-0 text-dark d-inline-block">
+                                <span class="font-weight-semi-bold ">${user}</span>
+                                <span class="">${comment}
+                                </span>
+                            </p>
+                        </div>`
+                }
+
+                if( comment_box.val() != ''){
+                    $.post(`/posts/comment/add/`,
+                    { post_id: id, comment: comment_box.val()},
+                    function(response) {
+                        post_btn.parent().prev().prev().children('.comments')
+                        .append(createComment(response.user, response.comment))
+
+                        comment_box.val('')
+                    }
+                    );
+                }
+            })
+
+
+            $('.like-btn').click(function(){
+                
+
+                var id = $(this).data('id')
+                var icon = $(this).children('i')
+                var btn = $(this)
+
+
+                $.ajax(`/posts/like/${id}/`, {
+                        method: 'GET',
+                        processData: false,
+                        contentType: false,
+                        success(response) {
+
+                            if(response.status == 'like'){
+                                icon.removeClass('far')
+                                icon.addClass('fas')
+                                btn.addClass('text-danger')
+
+                            }
+                            else if(response.status == 'dislike'){
+                                icon.removeClass('fas')
+                                icon.addClass('far')
+                                btn.removeClass('text-danger')
+                            }
+
+                            btn.parent().parent().next().text(response.count + ' likes')
+                        },
+                        error() {
+                        },
+                    });
+
+
+
+
+            })
+        })
+
+    </script>
+
+
+
+
+
 {% endblock content %}

@@ -12,6 +12,9 @@ class Post(models.Model):
     image = models.ImageField(upload_to="posts")
     # create_at = models.DateTimeField(auto_now_add=True)
     # modified_at = models.DateTimeField(auto_now=True)
+    def liked_users(self):
+        objects=Like.objects.filter(post=self).values_list('user',flat=True)
+        return objects    
 
 
 @receiver(post_delete, sender=Post)
@@ -30,10 +33,9 @@ class Like(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_comments")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_comments")
-    comment = models.TextField(default='no comment')
+    comment = models.TextField()
     # create_at = models.DateTimeField(auto_now_add=True)
     # modified_at = models.DateTimeField(auto_now=True)
-
 
 class HashTag(models.Model):
     tag = models.CharField(max_length=40)
