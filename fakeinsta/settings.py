@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 't3^abzc_wb+z!^q-7!%e53unp1jkh0h&v(3)^4@8x!(0y8meo='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -76,12 +76,25 @@ WSGI_APPLICATION = 'fakeinsta.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', 
+            'NAME': 'ramsheed$fakeinsta',
+            'USER': 'ramsheed',
+            'PASSWORD': 'vC9wPf5r3E@3ynF',
+            'HOST': 'ramsheed.mysql.pythonanywhere-services.com',   # Or an IP Address that your DB is hosted on
+            'PORT': '3306',
+        }
+    }
+
 
 
 # Password validation
@@ -139,3 +152,5 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+STATIC_ROOT = BASE_DIR / 'static'
