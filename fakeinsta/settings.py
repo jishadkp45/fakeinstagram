@@ -87,10 +87,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql', 
-            'NAME': 'ramsheed$fakeinsta',
-            'USER': 'ramsheed',
-            'PASSWORD': 'vC9wPf5r3E@3ynF',
-            'HOST': 'ramsheed.mysql.pythonanywhere-services.com',   # Or an IP Address that your DB is hosted on
+            'NAME': 'jishad$fakeinsta',
+            'USER': 'jishad',
+            'PASSWORD': 'jk12345678',
+            'HOST': 'jishad.mysql.pythonanywhere-services.com',   # Or an IP Address that your DB is hosted on
             'PORT': '3306',
         }
     }
